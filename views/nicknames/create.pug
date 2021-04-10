@@ -1,0 +1,18 @@
+extends ../layout
+
+block content
+  p.lead.text-center= title
+
+  hr
+
+  form.form-group(method="post")
+      div.form-input
+        label User
+        input.form-control(type="text", name="user", value=form.user.username readonly)
+
+      div.form-input.mt-3
+        label Name
+        input.form-control(type="text", name="name", value=form.name, autofocus)
+
+      div.form-input.mt-3
+          input.btn.btn-primary(type="submit", value="Submit")

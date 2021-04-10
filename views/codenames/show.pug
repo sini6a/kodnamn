@@ -1,0 +1,52 @@
+extends ../layout
+
+block content
+  p.lead.text-center= title
+
+  hr
+
+  if codename
+    table.table.table-borderless
+      tbody
+        tr
+          td Created at
+          td.font-weight-bold #{codename.createdAt}
+        tr
+          td Codename
+          td.font-weight-bold #{codename.name}
+        tr
+          td Location
+          td.font-weight-bold #{codename.location}
+        tr
+          td Address
+          td.font-weight-bold #{codename.address}
+        tr
+          td Manager
+          td.font-weight-bold #{manager.name}
+        tr
+          td Customer
+          td.font-weight-bold #{customer.name}
+
+    form.form-group(name="delete", method="post" action="/codenames/delete/" + codename.id)
+      input.btn-block.btn.btn-danger(type="submit" value="Delete codename")
+
+    a.btn-block.btn.btn-info(href="/codenames/edit/" + codename.id) Edit codename
+
+
+  p.lead.text-center.mt-5 Terminals
+
+  hr
+
+  if terminals.length
+    div.list-group
+      each terminal in terminals
+        a.list-group-item.list-group-item-action(href="/terminals/" + terminal.id) #{terminal.macAddress} (#{terminal.nickname.name})
+  else
+    div.list-group
+      p.text-center No terminals yet
+
+  form.form-inline.mt-3(method="get" action="/terminals/create/" + codename.id)
+    div.form-group.mb-2.pr-sm-3.w-75
+      input.form-control.w-100(type="text", name="macAddress", autofocus, required)
+
+    input.btn.btn-primary.mb-2.w-25(type="submit", value="Create terminal")

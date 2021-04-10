@@ -1,0 +1,42 @@
+extends ../layout
+
+block content
+  p.lead.text-center= title
+  p.text-center (#{terminal.nickname.name})
+  hr
+
+  if terminal
+    table.table.table-borderless
+      tbody
+        tr
+          td Created at
+          td.font-weight-bold #{terminal.createdAt}
+        tr
+          td Codename
+          td.font-weight-bold
+            a(href="/codenames/" + terminal.codename.id) #{terminal.codename.name}
+        if terminal.motherboard
+          tr
+            td Motherboard
+            td.font-weight-bold #{terminal.motherboard}
+        if terminal.processor
+          tr
+            td Processor
+            td.font-weight-bold #{terminal.processor}
+        if terminal.graphics
+          tr
+            td Graphics
+            td.font-weight-bold #{terminal.graphics}
+        if terminal.ram
+          tr
+            td RAM
+            td.font-weight-bold #{terminal.ram} GB
+        if terminal.teamviewer
+          tr
+            td TeamViewer ID
+            td.font-weight-bold #{terminal.teamviewer}
+
+    form.form-group(name="delete", method="post" action="/terminals/delete/" + terminal.id)
+      input.btn-block.btn.btn-danger(type="submit" value="Delete terminal")
+
+    a.btn-block.btn.btn-info(href="/terminals/edit/" + terminal.id) Edit terminal

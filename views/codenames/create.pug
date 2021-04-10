@@ -1,0 +1,36 @@
+extends ../layout
+
+block content
+  p.lead.text-center= title
+
+  hr
+
+  form.form-group(name="create", method="post")
+      div.form-input
+        label Codename
+        input.form-control(type="text", name="name", value=form.name, autofocus)
+
+      div.form-input.mt-3
+        label Location
+        input.form-control(type="text", name="location", value=form.location)
+
+      div.form-input.mt-3
+        label Address
+        input.form-control(type="text", name="address", value=form.address)
+
+      div.form-input.mt-3
+        label Manager
+        select.form-control(name="manager")
+          if managers
+            each manager in managers
+              option(value=manager.id, selected=(manager.id == form.manager)) #{manager.name}
+
+      div.form-input.mt-3
+        label Customer
+        select.form-control(name="customer")
+          if customers
+            each customer in customers
+              option(value=customer.id, selected=(customer.id == form.customer)) #{customer.name}
+
+      div.form-input.mt-3
+          input.btn.btn-primary(type="submit", value="Submit")

@@ -1,0 +1,51 @@
+extends ../layout
+
+block content
+  p.lead.text-center= title
+
+  hr
+
+  form.form-group(method="post")
+      div.form-input
+        label Codename
+        input.form-control(type="text", name="codename", value=form.codename readonly)
+
+      div.form-input.mt-3
+        label MAC Address
+        input.form-control(type="text", name="macAddress", value=form.macAddress, autofocus)
+
+      div.form-input.mt-3
+        label Nickname
+        select.form-control(name="nickname")
+          if nicknames
+            each nickname in nicknames
+              option(value=nickname.id selected=(nickname.id == form.nickname)) #{nickname.name}
+
+      p.text-center.mt-3 Specs
+      hr
+
+      div.form-input.mt-3
+        label Motherboard
+        input.form-control(type="text", name="motherboard", value=form.motherboard)
+
+      div.form-input.mt-3
+        label Processor
+        input.form-control(type="text", name="processor", value=form.processor)
+
+      div.form-input.mt-3
+        label Graphics
+        input.form-control(type="text", name="graphics", value=form.graphics)
+
+      div.form-input.mt-3
+        label RAM
+        input.form-control(type="number", name="ram", value=form.ram)
+
+      p.text-center.mt-3 Connections
+      hr
+
+      div.form-input.mt-3
+        label TeamViewer
+        input.form-control(type="text", name="teamviewer", value=form.teamviewer)
+
+      div.form-input.mt-3
+          input.btn.btn-primary(type="submit", value="Submit")
