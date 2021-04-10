@@ -5,7 +5,7 @@ block content
 
   hr
 
-  if managers
+  if managers.length
     div.list-group
       each manager in managers
         a.list-group-item.list-group-item-action(href="/managers/edit/" + manager.id) #{manager.name}

@@ -5,7 +5,7 @@ block content
 
   hr
 
-  if customers
+  if customers.length
     div.list-group
       each customer in customers
         a.list-group-item.list-group-item-action(href="/customers/edit/" + customer.id) #{customer.name}
