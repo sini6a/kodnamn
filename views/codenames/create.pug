@@ -1,36 +1,72 @@
 extends ../layout
 
 block content
-  p.lead.text-center= title
+  if codename
+    div.row
+      div.col-1
+        a.btn.btn-outline-secondary.btn-block.btn-sm(href="/codenames/" + codename.id)
+          <i class="bi bi-arrow-left"></i>
+      p.lead.text-center.col-10= title
+      form.col-1(method="post" action="/codenames/delete/" + codename.id)
+        button.btn.btn-outline-danger.btn-block.btn-sm(type="submit")
+          <i class="bi bi-trash"></i>
+
+  else
+    div.row
+      div.col-1
+        a.btn.btn-outline-secondary.btn-block.btn-sm(href="/codenames/")
+          <i class="bi bi-arrow-left"></i>
+      p.lead.text-center.col-10= title
+      div.col-1
+        a.btn.btn-outline-danger.btn-block.btn-sm.disabled
+          <i class="bi bi-trash"></i>
 
   hr
 
   form.form-group(name="create", method="post")
       div.form-input
-        label Codename
+        label Kodnamn
         input.form-control(type="text", name="name", value=form.name, autofocus)
 
       div.form-input.mt-3
-        label Location
-        input.form-control(type="text", name="location", value=form.location)
+        label Land
+        select.form-control.custom-select(name="country" disabled)
+          option(value="Sweden", selected="Sweden") Sweden
 
       div.form-input.mt-3
-        label Address
+        label Stad
+        select.form-control.custom-select(name="location")
+          if locations
+            each location in locations
+              option(value=location.city, selected=(location.city == form.location)) #{location.city}
+
+      div.form-input.mt-3
+        label Adress
         input.form-control(type="text", name="address", value=form.address)
 
-      div.form-input.mt-3
-        label Manager
-        select.form-control(name="manager")
-          if managers
-            each manager in managers
-              option(value=manager.id, selected=(manager.id == form.manager)) #{manager.name}
+      div.row
+        div.form-input.mt-3.col-10
+          label Agent
+          select.form-control.custom-select(name="manager")
+            if managers
+              each manager in managers
+                option(value=manager.id, selected=(manager.id == form.manager)) #{manager.name}
+        div.form-input.mt-3.col-2
+          label <br>
+          a.btn.btn-outline-primary.btn-block(target="popup" onclick="window.open('/managers/create','popup','width=600,height=600'); return false;")
+            <i class="bi bi-plus"></i>
+
+      div.row
+        div.form-input.mt-3.col-10
+          label Kund
+          select.form-control.custom-select(name="customer")
+            if customers
+              each customer in customers
+                option(value=customer.id, selected=(customer.id == form.customer)) #{customer.name}
+        div.form-input.mt-3.col-2
+          label <br>
+          a.btn.btn-outline-primary.btn-block(target="popup" onclick="window.open('/customers/create','popup','width=600,height=600'); window.location.reload();")
+            <i class="bi bi-plus"></i>
 
       div.form-input.mt-3
-        label Customer
-        select.form-control(name="customer")
-          if customers
-            each customer in customers
-              option(value=customer.id, selected=(customer.id == form.customer)) #{customer.name}
-
-      div.form-input.mt-3
-          input.btn.btn-primary(type="submit", value="Submit")
+          input.btn.btn-primary(type="submit", value="Skicka")

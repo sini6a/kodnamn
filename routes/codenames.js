@@ -8,16 +8,17 @@ var Customer = require("../models/customer");
 var Terminal = require("../models/terminal");
 const { body, validationResult } = require('express-validator');
 
+// Location
+var locations = require('../locations/se.json')
+
 /* GET codenames listing. */
 router.get('/', isAuthenticated, async function(req, res, next) {
-  let errors = new Object()
   let codenames = await Codename.find({user: req.user.id}).sort({createdAt: -1}).exec();
 
   res.render('codenames/index', {
-    title: "Codenames",
+    title: "Kodnamn",
     authenticated: req.isAuthenticated(),
     codenames: codenames,
-    errors
   })
 });
 
@@ -33,17 +34,19 @@ router.get('/create/', isAuthenticated, async function(req, res, next) {
       manager: manager,
       customer: customer
   };
-  let errors = new Object()
-  let managers = await Manager.find({user: req.user._id}).exec()
-  let customers = await Customer.find({user: req.user._id}).exec()
 
-  // let managers = Manager.find('user', req.user._id);
-  console.log(managers);
+  try {
+    managers = await Manager.find({user: req.user._id}).exec();
+    customers = await Customer.find({user: req.user._id}).exec();
+  } catch (e) {
+    console.error(e);
+  }
 
   res.render('codenames/create', {
-    title: "Register codename",
+    title: "Registera kodnamn",
     authenticated: req.isAuthenticated(),
-    errors,
+    codename: null,
+    locations,
     form,
     managers,
     customers
@@ -52,11 +55,9 @@ router.get('/create/', isAuthenticated, async function(req, res, next) {
 
 // create new codename (post)
 router.post("/create", [
-  body('name', 'Codename is required').notEmpty(),
-  body('location', 'Location is required').notEmpty(),
-  body('address', 'Address is required').notEmpty(),
-  body('manager', 'Manager is required').notEmpty(),
-  body('customer', 'Customer is required').notEmpty()
+  body('name', 'Kodnamn är obligatoriskt').notEmpty(),
+  body('location', 'Stad är obligatoriskt').notEmpty(),
+  body('manager', 'Agent är obligatorisk').notEmpty(),
 ], isAuthenticated, async function(req, res, next){
     let { name, location, address, manager, customer } = req.body
 
@@ -80,8 +81,10 @@ router.post("/create", [
 
     if(!errors.isEmpty()) {
       res.render('codenames/create', {
-        title: "Register codename",
+        title: "Registera kodnamn",
         authenticated: req.isAuthenticated(),
+        codename: null,
+        locations,
         errors,
         form,
         managers,
@@ -97,8 +100,10 @@ router.post("/create", [
         console.error(e);
         errors.push({msg: e});
         res.render('codenames/create', {
-          title: "Register codename",
+          title: "Registera kodnamn",
           authenticated: req.isAuthenticated(),
+          codename: null,
+          locations,
           errors,
           form,
           managers,
@@ -106,7 +111,7 @@ router.post("/create", [
         })
       }
 
-      req.flash('success', 'Codename successfully created!')
+      req.flash('success', 'Kodnamnet har registrerats!')
       res.redirect('/codenames');
     }
 });
@@ -133,8 +138,9 @@ router.get('/edit/:id', isAuthenticated, async function(req, res, next) {
   };
 
   res.render('codenames/create', {
-    title: "Modifying " + codename.name,
+    title: "Modifierar " + codename.name,
     authenticated: req.isAuthenticated(),
+    locations,
     form,
     managers,
     customers
@@ -143,11 +149,9 @@ router.get('/edit/:id', isAuthenticated, async function(req, res, next) {
 
 // modify codename (post)
 router.post("/edit/:id", [
-  body('name', 'Codename is required').notEmpty(),
-  body('location', 'Location is required').notEmpty(),
-  body('address', 'Address is required').notEmpty(),
-  body('manager', 'Manager is required').notEmpty(),
-  body('customer', 'Customer is required').notEmpty()
+  body('name', 'Kodnamn är obligatoriskt').notEmpty(),
+  body('location', 'Stad är obligatoriskt').notEmpty(),
+  body('manager', 'Agent är obligatorisk').notEmpty(),
 ], isAuthenticated, async function(req, res, next){
     let { name, location, address, manager, customer } = req.body
     let id = req.params.id
@@ -173,8 +177,9 @@ router.post("/edit/:id", [
 
     if(!errors.isEmpty()) {
       res.render('codenames/create', {
-        title: "Modifying " + codename.name,
+        title: "Modifierar " + codename.name,
         authenticated: req.isAuthenticated(),
+        locations,
         errors,
         form,
         managers,
@@ -187,8 +192,9 @@ router.post("/edit/:id", [
         console.error(e);
         errors.push({msg: e});
         res.render('codenames/create', {
-          title: "Modifying " + codename.name,
+          title: "Modifierar " + codename.name,
           authenticated: req.isAuthenticated(),
+          locations,
           errors,
           form,
           managers,
@@ -196,7 +202,7 @@ router.post("/edit/:id", [
         })
       }
 
-      req.flash('success', 'Codename successfully modified!')
+      req.flash('success', 'Kodnamnet har modifierats!')
       res.redirect('/codenames/' + codename.id);
     }
 });
@@ -214,15 +220,13 @@ router.post('/delete/:id', isAuthenticated, async function(req, res, next) {
     console.log(e);
   }
 
-  req.flash('success', 'Codename successfully deleted!')
+  req.flash('success', 'Kodnamnet har raderats!')
   res.redirect('/codenames');
 })
 
 // show codename (get)
 router.get('/:id', isAuthenticated, async function(req, res, next) {
   let id = req.params.id
-
-  let errors = new Object()
 
   try {
     var codename = await Codename.findById(id).exec();
@@ -242,7 +246,6 @@ router.get('/:id', isAuthenticated, async function(req, res, next) {
     customer,
     manager,
     terminals,
-    errors
   })
 });
 

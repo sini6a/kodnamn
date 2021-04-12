@@ -10,7 +10,7 @@ router.get('/', isAuthenticated, async function(req, res, next) {
   let customers = await Customer.find({user: req.user.id}).exec();
 
   res.render('customers/index', {
-    title: "Customers",
+    title: "Kunder",
     authenticated: req.isAuthenticated(),
     customers: customers,
   })
@@ -28,14 +28,15 @@ router.get('/create', isAuthenticated, function(req, res, next) {
   };
 
   res.render('customers/create', {
-    title: "Register customer",
+    title: "Registrera ny kund",
     authenticated: req.isAuthenticated(),
+    customer: null,
     form,
   })
 })
 
 // create new customer (post)
-router.post("/create", [body('name', 'Customer name is required').notEmpty()], isAuthenticated, async function(req, res, next){
+router.post("/create", [body('name', 'Namn är obligatoriskt').notEmpty()], isAuthenticated, async function(req, res, next){
     let { name, contact, note } = req.body
 
     // fields
@@ -49,8 +50,9 @@ router.post("/create", [body('name', 'Customer name is required').notEmpty()], i
 
     if(!errors.isEmpty()) {
       res.render('customers/create', {
-        title: "Register customer",
+        title: "Registrera ny kund",
         authenticated: req.isAuthenticated(),
+        customer: null,
         errors,
         form,
       })
@@ -64,14 +66,15 @@ router.post("/create", [body('name', 'Customer name is required').notEmpty()], i
         console.error(e);
         errors.push({msg: e});
         res.render('customers/create', {
-          title: "Register customer",
+          title: "Registrera ny kund",
           authenticated: req.isAuthenticated(),
+          customer: null,
           errors,
           form,
         })
       }
 
-      req.flash('success', 'Customer successfully created!')
+      req.flash('success', 'Kunden har registrerats!')
       res.redirect('/customers');
     }
 });
@@ -94,15 +97,16 @@ router.get('/edit/:id', isAuthenticated, async function(req, res, next) {
   };
 
   res.render('customers/create', {
-    title: 'Modifying ' + customer.name,
+    title: 'Modifierar ' + customer.name,
     authenticated: req.isAuthenticated(),
+    customer: customer,
     form,
   })
 })
 
 // modify customer (post)
 router.post("/edit/:id", [
-  body('name', 'Customer name is required').notEmpty()
+  body('name', 'Namn är obligatoriskt').notEmpty()
 ], isAuthenticated, async function(req, res, next){
     let { name, contact, note } = req.body
     let id = req.params.id
@@ -124,10 +128,11 @@ router.post("/edit/:id", [
 
     if(!errors.isEmpty()) {
       res.render('customers/create', {
-        title: 'Modifying ' + customer.name,
+        title: 'Modifierar ' + customer.name,
         authenticated: req.isAuthenticated(),
         form,
-        errors
+        errors,
+        customer
       })
     } else {
       try {
@@ -136,18 +141,34 @@ router.post("/edit/:id", [
         console.error(e);
         errors.push({msg: e});
         res.render('customers/create', {
-          title: 'Modifying ' + customer.name,
+          title: 'Modifierar ' + customer.name,
           authenticated: req.isAuthenticated(),
           form,
-          errors
+          errors,
+          customer
         })
       }
 
-      req.flash('success', 'Customer successfully modified!')
+      req.flash('success', 'Kunden har modifierats!')
       res.redirect('/customers');
     }
 });
 
+// delete codename (post)
+router.post('/delete/:id', isAuthenticated, async function(req, res, next) {
+  let id = req.params.id
+
+  try {
+    await Customer.findById(id, function(err, customer) {
+      customer.remove();
+    }).exec();
+  } catch (e) {
+    console.log(e);
+  }
+
+  req.flash('success', 'Kunden har raderats!')
+  res.redirect('/customers');
+})
 
 // check if user is logged in
 function isAuthenticated(req, res, next){

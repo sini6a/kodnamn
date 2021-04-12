@@ -1,23 +1,35 @@
 extends ../layout
 
 block content
-  p.lead.text-center= title
-  p.text-center (#{terminal.nickname.name})
+  if terminal
+    div.row
+      div.col-1
+        a.btn.btn-outline-secondary.btn-block.btn-sm(href="/codenames/" + terminal.codename.id)
+          <i class="bi bi-arrow-left"></i>
+      p.lead.text-center.col-10= title
+      div.col-1
+        a.btn.btn-outline-primary.btn-block.btn-sm(href="/terminals/edit/" + terminal.id)
+          <i class="bi bi-pen"></i>
+    p.text-center (#{terminal.nickname.name})
+
   hr
 
   if terminal
     table.table.table-borderless
       tbody
         tr
-          td Created at
-          td.font-weight-bold #{terminal.createdAt}
+          td Datum
+          td.font-weight-bold #{new Date(terminal.createdAt).toLocaleDateString('se-SE')}
         tr
-          td Codename
+          td Tid
+          td.font-weight-bold #{new Date(terminal.createdAt).toLocaleTimeString('se-SE')}
+        tr
+          td Kodnamn
           td.font-weight-bold
             a(href="/codenames/" + terminal.codename.id) #{terminal.codename.name}
         if terminal.motherboard
           tr
-            td Motherboard
+            td Moderkort
             td.font-weight-bold #{terminal.motherboard}
         if terminal.processor
           tr
@@ -25,7 +37,7 @@ block content
             td.font-weight-bold #{terminal.processor}
         if terminal.graphics
           tr
-            td Graphics
+            td Grafikkort
             td.font-weight-bold #{terminal.graphics}
         if terminal.ram
           tr
@@ -33,10 +45,5 @@ block content
             td.font-weight-bold #{terminal.ram} GB
         if terminal.teamviewer
           tr
-            td TeamViewer ID
+            td TeamViewer
             td.font-weight-bold #{terminal.teamviewer}
-
-    form.form-group(name="delete", method="post" action="/terminals/delete/" + terminal.id)
-      input.btn-block.btn.btn-danger(type="submit" value="Delete terminal")
-
-    a.btn-block.btn.btn-info(href="/terminals/edit/" + terminal.id) Edit terminal

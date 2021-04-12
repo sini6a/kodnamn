@@ -11,10 +11,10 @@ block content
         a.list-group-item.list-group-item-action(href="/customers/edit/" + customer.id) #{customer.name}
   else
     div.list-group
-      p.text-center No customers yet
+      p.text-center Inga kunder än
 
   form.form-inline.mt-3(method="get" action="/customers/create/")
     div.form-group.mb-2.pr-sm-3.w-75
       input.form-control.w-100(type="text", name="name", autofocus, required)
 
-    input.btn.btn-primary.mb-2.w-25(type="submit", value="Create customer")
+    input.btn.btn-primary.mb-2.w-25(type="submit", value="Ny kund")

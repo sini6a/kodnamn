@@ -1,0 +1,16 @@
+extends ./layout
+
+block content
+  p.lead.text-center= title
+
+  hr
+
+  p.lead.text-center Kodnamn
+
+  if codenames.length
+    div.list-group.mt-3
+      each codename in codenames
+        a.list-group-item.list-group-item-action(href="/codenames/" + codename.id) #{codename.name}
+  else
+    div.list-group.mt-3
+      p.text-center Inga kodnamn hittade

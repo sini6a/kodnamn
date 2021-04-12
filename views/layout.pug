@@ -5,38 +5,55 @@ html
     meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
     title= title
     link(rel="stylesheet", href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css", integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z", crossorigin="anonymous")
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.4.1/font/bootstrap-icons.min.css" integrity="sha512-YBSrHBAMjFhWHodf0RF58XB/x9lmuwBtyJv1LWDHQa1nOaWNXfG3Etc/lEXfW+qBx8ne79JnzccDs59je/ccVA==" crossorigin="anonymous" />
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    nav.navbar.navbar-expand-md.navbar-dark.bg-dark.fixed-top
-      a.navbar-brand(href="/") BRAND
-      button.navbar-toggler(type="button" data-toggle="collapse" data-target="#main-navbar")
-        span.navbar-toggler-icon
-      #main-navbar.collapse.navbar-collapse
-        ul.navbar-nav.mr-auto
-          li.nav-item.active
-            a.nav-link(href="/") Home
-          if authenticated
-            li.nav-item
-              a.nav-link(href="/codenames") Codenames
-            li.nav-item
-              a.nav-link(href="/managers") Managers
-            li.nav-item
-              a.nav-link(href="/customers") Customers
-            li.nav-item.dropdown
-              a#terminals.nav-link.dropdown-toggle(href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") Terminals
-              .dropdown-menu
-                a.dropdown-item(href="/nicknames") Nicknames
-            li.nav-item
-              a.nav-link(href="/users/logout") Logout
-          else
-            li.nav-item
-              a.nav-link(href="/users/login") Login
-            li.nav-item
-              a.nav-link(href="/users/register") Register
-        form.form-inline.my-2.my-lg-0
-          input.form-control.mr-sm-2(type="text" placeholder="Input...")
-          button.btn.btn-primary.my-2.my-sm-0(type="submit") OK
-    main.container(role="main" style="padding: 60px;")
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.fixed-top
+      div.container
+        a.navbar-brand(href="/")
+          <img src="/images/logo.png" height="30" alt="KODNAMN">
+        button.navbar-toggler(type="button" data-toggle="collapse" data-target="#main-navbar")
+          span.navbar-toggler-icon
+        #main-navbar.collapse.navbar-collapse
+          ul.navbar-nav.mr-auto
+            li.nav-item.active
+              a.nav-link(href="/") Start
+            if authenticated
+              li.nav-item
+                a.nav-link(href="/codenames") Kodnamn
+              li.nav-item
+                a.nav-link(href="/managers") Agenter
+              li.nav-item
+                a.nav-link(href="/customers") Kunder
+              li.nav-item.dropdown
+                a#terminals.nav-link.dropdown-toggle(href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") Terminals
+                .dropdown-menu
+                  a.dropdown-item(href="/nicknames") Smeknamn
+              li.nav-item
+                a.nav-link(href="/users/logout") Logga ut
+            else
+              li.nav-item
+                a.nav-link(href="/users/login") Logga in
+              li.nav-item
+                a.nav-link(href="/users/register") Registrera mig
+          form.form-inline.my-2.my-lg-0(action="/search/")
+            input.form-control.mr-sm-2(type="text" name="keyword" placeholder="Sökörd")
+            button.btn.btn-primary.my-2.my-sm-0(type="submit") Sök
+
+    main.container.mt-4(role="main")
+      if errors
+        each error in errors.array()
+          div.alert.alert-danger.mb-3
+            | #{error.msg}
+
+      if error != ''
+        div.alert.alert-danger.mb-3
+          | #{error}
+
+      if success != ''
+        div.alert.alert-success.mb-3
+          | #{success}
+
       block content
 
     script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.slim.min.js")

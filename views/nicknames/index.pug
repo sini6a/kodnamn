@@ -11,10 +11,10 @@ block content
         a.list-group-item.list-group-item-action(href="/nicknames/edit/" + nickname.id) #{nickname.name}
   else
     div.list-group
-      p.text-center No nicknames yet
+      p.text-center Inga smeknamn än
 
   form.form-inline.mt-3(name="create", method="post")
     div.form-group.mb-2.pr-sm-3.w-75
       input.form-control.w-100(type="text", name="name", autofocus, required)
 
-    input.btn.btn-primary.mb-2.w-25(type="submit", value="Create nickname")
+    input.btn.btn-primary.mb-2.w-25(type="submit", value="Nytt smeknamn")

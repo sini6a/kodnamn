@@ -11,7 +11,7 @@ router.get('/', isAuthenticated, async function(req, res, next) {
   let managers = await Manager.find({user: req.user.id}).exec();
 
   res.render('managers/index', {
-    title: "Managers",
+    title: "Agenter",
     authenticated: req.isAuthenticated(),
     managers: managers,
   })
@@ -29,14 +29,15 @@ router.get('/create', isAuthenticated, function(req, res, next) {
   };
 
   res.render('managers/create', {
-    title: "Register manager",
+    title: "Registrera ny agent",
     authenticated: req.isAuthenticated(),
+    manager: null,
     form,
   })
 })
 
 // create new manager (post)
-router.post("/create", [body('name', 'Manager name is required').notEmpty()], isAuthenticated, async function(req, res, next){
+router.post("/create", [body('name', 'Namn är obligatoriskt').notEmpty()], isAuthenticated, async function(req, res, next){
     let { name, contact, note } = req.body
 
     // fields
@@ -50,8 +51,9 @@ router.post("/create", [body('name', 'Manager name is required').notEmpty()], is
 
     if(!errors.isEmpty()) {
       res.render('managers/create', {
-        title: "Register manager",
+        title: "Registrera ny agent",
         authenticated: req.isAuthenticated(),
+        manager: null,
         errors,
         form,
       })
@@ -65,14 +67,15 @@ router.post("/create", [body('name', 'Manager name is required').notEmpty()], is
         console.error(e);
         errors.push({msg: e});
         res.render('managers/create', {
-          title: "Register manager",
+          title: "Registrera ny agent",
           authenticated: req.isAuthenticated(),
+          manager: null,
           errors,
           form,
         })
       }
 
-      req.flash('success', 'Manager successfully created!')
+      req.flash('success', 'Agenten har registrerats!')
       res.redirect('/managers');
     }
 });
@@ -95,15 +98,16 @@ router.get('/edit/:id', isAuthenticated, async function(req, res, next) {
   };
 
   res.render('managers/create', {
-    title: 'Modyfing ' + manager.name,
+    title: 'Modifierar ' + manager.name,
     authenticated: req.isAuthenticated(),
+    manager,
     form,
   })
 })
 
 // modify manager (post)
 router.post("/edit/:id", [
-  body('name', 'Manager name is required').notEmpty()
+  body('name', 'Namn är obligatoriskt').notEmpty()
 ], isAuthenticated, async function(req, res, next){
     let { name, contact, note } = req.body
     let id = req.params.id
@@ -125,8 +129,9 @@ router.post("/edit/:id", [
 
     if(!errors.isEmpty()) {
       res.render('managers/create', {
-        title: 'Modyfing ' + manager.name,
+        title: 'Modifierar ' + manager.name,
         authenticated: req.isAuthenticated(),
+        manager,
         form,
         errors
       })
@@ -137,17 +142,34 @@ router.post("/edit/:id", [
         console.error(e);
         errors.push({msg: e});
         res.render('managers/create', {
-          title: 'Modyfing ' + manager.name,
+          title: 'Modifierar ' + manager.name,
           authenticated: req.isAuthenticated(),
+          manager,
           form,
           errors
         })
       }
 
-      req.flash('success', 'Manager successfully modified!')
+      req.flash('success', 'Agenten har modifierats!')
       res.redirect('/managers');
     }
 });
+
+// delete codename (post)
+router.post('/delete/:id', isAuthenticated, async function(req, res, next) {
+  let id = req.params.id
+
+  try {
+    await Manager.findById(id, function(err, manager) {
+      manager.remove();
+    }).exec();
+  } catch (e) {
+    console.log(e);
+  }
+
+  req.flash('success', 'Agenten har raderats!')
+  res.redirect('/managers');
+})
 
 // check if user is logged in
 function isAuthenticated(req, res, next){

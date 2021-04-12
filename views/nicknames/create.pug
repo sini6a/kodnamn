@@ -1,18 +1,36 @@
 extends ../layout
 
 block content
-  p.lead.text-center= title
+  if nickname
+    div.row
+      div.col-1
+        a.btn.btn-outline-secondary.btn-block.btn-sm(href="/nicknames")
+          <i class="bi bi-arrow-left"></i>
+      p.lead.text-center.col-10= title
+      form.col-1(method="post" action="/nicknames/delete/" + nickname.id)
+        button.btn.btn-outline-danger.btn-block.btn-sm(type="submit")
+          <i class="bi bi-trash"></i>
+
+  else
+    div.row
+      div.col-1
+        a.btn.btn-outline-secondary.btn-block.btn-sm(href="/nicknames")
+          <i class="bi bi-arrow-left"></i>
+      p.lead.text-center.col-10= title
+      div.col-1
+        a.btn.btn-outline-danger.btn-block.btn-sm.disabled
+          <i class="bi bi-trash"></i>
 
   hr
 
   form.form-group(method="post")
       div.form-input
-        label User
+        label Användare
         input.form-control(type="text", name="user", value=form.user.username readonly)
 
       div.form-input.mt-3
-        label Name
+        label Smeknamn
         input.form-control(type="text", name="name", value=form.name, autofocus)
 
       div.form-input.mt-3
-          input.btn.btn-primary(type="submit", value="Submit")
+          input.btn.btn-primary(type="submit", value="Skicka")

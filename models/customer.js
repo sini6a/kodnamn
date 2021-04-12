@@ -8,6 +8,13 @@ var CustomerSchema = new mongoose.Schema({
   note: String,
 });
 
+// delete every codename with customer
+CustomerSchema.pre('remove', async function(next) {
+  // Remove all codenames that reference the removed customer.
+  console.log('removing...');
+  await Codename.deleteMany({ customer: this.id }, next);
+});
+
 // ChannelSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model("Customer", CustomerSchema);

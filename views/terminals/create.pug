@@ -1,31 +1,48 @@
 extends ../layout
 
 block content
-  p.lead.text-center= title
+  if terminal
+    div.row
+      div.col-1
+        a.btn.btn-outline-secondary.btn-block.btn-sm(href="/terminals/" + terminal.id)
+          <i class="bi bi-arrow-left"></i>
+      p.lead.text-center.col-10= title
+      form.col-1(method="post" action="/terminals/delete/" + terminal.id)
+        button.btn.btn-outline-danger.btn-block.btn-sm(type="submit")
+          <i class="bi bi-trash"></i>
 
+  else
+    div.row
+      div.col-1
+        a.btn.btn-outline-secondary.btn-block.btn-sm(href="/codenames/" + codename.id)
+          <i class="bi bi-arrow-left"></i>
+      p.lead.text-center.col-10= title
+      div.col-1
+        a.btn.btn-outline-danger.btn-block.btn-sm.disabled
+          <i class="bi bi-trash"></i>
   hr
 
   form.form-group(method="post")
       div.form-input
-        label Codename
+        label Kodnamn
         input.form-control(type="text", name="codename", value=form.codename readonly)
 
       div.form-input.mt-3
-        label MAC Address
+        label MAC Adress
         input.form-control(type="text", name="macAddress", value=form.macAddress, autofocus)
 
       div.form-input.mt-3
-        label Nickname
-        select.form-control(name="nickname")
+        label Smeknamn
+        select.form-control.custom-select(name="nickname")
           if nicknames
             each nickname in nicknames
               option(value=nickname.id selected=(nickname.id == form.nickname)) #{nickname.name}
 
-      p.text-center.mt-3 Specs
+      p.text-center.mt-3 Specifikationer
       hr
 
       div.form-input.mt-3
-        label Motherboard
+        label Moderkort
         input.form-control(type="text", name="motherboard", value=form.motherboard)
 
       div.form-input.mt-3
@@ -33,14 +50,14 @@ block content
         input.form-control(type="text", name="processor", value=form.processor)
 
       div.form-input.mt-3
-        label Graphics
+        label Grafikkort
         input.form-control(type="text", name="graphics", value=form.graphics)
 
       div.form-input.mt-3
         label RAM
         input.form-control(type="number", name="ram", value=form.ram)
 
-      p.text-center.mt-3 Connections
+      p.text-center.mt-3 Anslutning information
       hr
 
       div.form-input.mt-3
@@ -48,4 +65,4 @@ block content
         input.form-control(type="text", name="teamviewer", value=form.teamviewer)
 
       div.form-input.mt-3
-          input.btn.btn-primary(type="submit", value="Submit")
+          input.btn.btn-primary(type="submit", value="Skicka")

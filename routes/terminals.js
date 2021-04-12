@@ -14,8 +14,8 @@ router.get('/create/:codename', isAuthenticated, async function(req, res, next) 
   let id = req.params.codename
 
   try {
-    var codename = await Codename.findById(id).exec();
-    var nicknames = await Nickname.find({user: req.user}).exec();
+    codename = await Codename.findById(id).exec();
+    nicknames = await Nickname.find({user: req.user}).exec();
   } catch (e) {
     console.error(e);
   }
@@ -33,8 +33,9 @@ router.get('/create/:codename', isAuthenticated, async function(req, res, next) 
   };
 
   res.render('terminals/create', {
-    title: "Register terminal",
+    title: "Registrera ny terminal",
     authenticated: req.isAuthenticated(),
+    terminal: null,
     form,
     codename,
     nicknames
@@ -43,15 +44,15 @@ router.get('/create/:codename', isAuthenticated, async function(req, res, next) 
 
 // create new terminal (post)
 router.post("/create/:codename", [
-  body('macAddress', 'MAC address is required').notEmpty(),
-  body('nickname', 'Nickname is required').notEmpty()
+  body('macAddress', 'MAC adress är obligatorisk').notEmpty(),
+  body('nickname', 'Smeknamn är obligatoriskt').notEmpty()
 ], isAuthenticated, async function(req, res, next){
     let { macAddress, nickname, motherboard, processor, graphics, ram, teamviewer } = req.body
     let id = req.params.codename
 
     try {
-      var codename = await Codename.findById(id).exec();
-      var nicknames = await Nickname.find({user: req.user}).exec();
+      codename = await Codename.findById(id).exec();
+      nicknames = await Nickname.find({user: req.user}).exec();
     } catch (e) {
       console.error(e);
     }
@@ -72,8 +73,9 @@ router.post("/create/:codename", [
 
     if(!errors.isEmpty()) {
       res.render('terminals/create', {
-        title: "Register terminal",
+        title: "Registrera ny terminal",
         authenticated: req.isAuthenticated(),
+        terminal: null,
         errors,
         form,
         codename,
@@ -90,8 +92,9 @@ router.post("/create/:codename", [
         console.error(e);
         errors.push({msg: e});
         res.render('terminals/create', {
-          title: "Register terminal",
+          title: "Registrera ny terminal",
           authenticated: req.isAuthenticated(),
+          terminal: null,
           errors,
           form,
           codename,
@@ -99,7 +102,7 @@ router.post("/create/:codename", [
         })
       }
 
-      req.flash('success', 'Terminal successfully created!')
+      req.flash('success', 'Terminalen har registrerats!')
       res.redirect('/codenames/' + codename.id);
     }
 });
@@ -128,8 +131,9 @@ router.get('/edit/:id', isAuthenticated, async function(req, res, next) {
   };
 
   res.render('terminals/create', {
-    title: 'Modifying ' + terminal.macAddress,
+    title: 'Modifierar ' + terminal.macAddress,
     authenticated: req.isAuthenticated(),
+    terminal,
     form,
     nicknames
   })
@@ -137,8 +141,8 @@ router.get('/edit/:id', isAuthenticated, async function(req, res, next) {
 
 // modify terminal (post)
 router.post("/edit/:id", [
-  body('macAddress', 'MAC address is required').notEmpty(),
-  body('nickname', 'Nickname is required').notEmpty()
+  body('macAddress', 'MAC adress är obligatorisk').notEmpty(),
+  body('nickname', 'Smeknamn är obligatoriskt').notEmpty()
 ], isAuthenticated, async function(req, res, next){
     let { macAddress, nickname, motherboard, processor, graphics, ram, teamviewer } = req.body
     let id = req.params.id
@@ -165,8 +169,9 @@ router.post("/edit/:id", [
 
     if(!errors.isEmpty()) {
       res.render('terminals/create', {
-        title: 'Modifying ' + terminal.macAddress,
+        title: 'Modifierar ' + terminal.macAddress,
         authenticated: req.isAuthenticated(),
+        terminal,
         errors,
         form,
         nicknames
@@ -178,15 +183,16 @@ router.post("/edit/:id", [
         console.error(e);
         errors.push({msg: e});
         res.render('terminals/create', {
-          title: 'Modifying ' + terminal.macAddress,
+          title: 'Modifierar ' + terminal.macAddress,
           authenticated: req.isAuthenticated(),
+          terminal,
           errors,
           form,
           nicknames
         })
       }
 
-      req.flash('success', 'Terminal successfully modified!')
+      req.flash('success', 'Terminalen har modifierats!')
       res.redirect('/codenames/' + terminal.codename);
     }
 });
@@ -204,15 +210,13 @@ router.post('/delete/:id', isAuthenticated, async function(req, res, next) {
     console.log(e);
   }
 
-  req.flash('success', 'Terminal successfully deleted!')
+  req.flash('success', 'Terminalen har raderats!')
   res.redirect('/codenames/' + codename._id);
 })
 
 // show terminal (get)
 router.get('/:id', isAuthenticated, async function(req, res, next) {
   let id = req.params.id
-
-  let errors = new Object()
 
   try {
     terminal = await Terminal.findById(id).populate('codename').populate('nickname').exec();
@@ -224,7 +228,6 @@ router.get('/:id', isAuthenticated, async function(req, res, next) {
     title: terminal.macAddress,
     authenticated: req.isAuthenticated(),
     terminal,
-    errors
   })
 });
 

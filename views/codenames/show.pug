@@ -1,7 +1,15 @@
 extends ../layout
 
 block content
-  p.lead.text-center= title
+  if codename
+    div.row
+      div.col-1
+        a.btn.btn-outline-secondary.btn-block.btn-sm(href="/codenames/")
+          <i class="bi bi-arrow-left"></i>
+      p.lead.text-center.col-10= title
+      div.col-1
+        a.btn.btn-outline-primary.btn-block.btn-sm(href="/codenames/edit/" + codename.id)
+          <i class="bi bi-pen"></i>
 
   hr
 
@@ -9,31 +17,30 @@ block content
     table.table.table-borderless
       tbody
         tr
-          td Created at
-          td.font-weight-bold #{codename.createdAt}
+          td Datum
+          td.font-weight-bold #{new Date(codename.createdAt).toLocaleDateString('se-SE')}
         tr
-          td Codename
+          td Tid
+          td.font-weight-bold #{new Date(codename.createdAt).toLocaleTimeString('se-SE')}
+        tr
+          td Kodnamn
           td.font-weight-bold #{codename.name}
         tr
-          td Location
+          td Stad
           td.font-weight-bold #{codename.location}
+        if codename.address
+          tr
+            td Adress
+            td.font-weight-bold #{codename.address}
         tr
-          td Address
-          td.font-weight-bold #{codename.address}
-        tr
-          td Manager
+          td Agent
           td.font-weight-bold #{manager.name}
         tr
-          td Customer
+          td Kund
           td.font-weight-bold #{customer.name}
 
-    form.form-group(name="delete", method="post" action="/codenames/delete/" + codename.id)
-      input.btn-block.btn.btn-danger(type="submit" value="Delete codename")
 
-    a.btn-block.btn.btn-info(href="/codenames/edit/" + codename.id) Edit codename
-
-
-  p.lead.text-center.mt-5 Terminals
+  p.lead.text-center.mt-5 Terminaler
 
   hr
 
@@ -43,10 +50,10 @@ block content
         a.list-group-item.list-group-item-action(href="/terminals/" + terminal.id) #{terminal.macAddress} (#{terminal.nickname.name})
   else
     div.list-group
-      p.text-center No terminals yet
+      p.text-center Inga terminaler än
 
   form.form-inline.mt-3(method="get" action="/terminals/create/" + codename.id)
     div.form-group.mb-2.pr-sm-3.w-75
       input.form-control.w-100(type="text", name="macAddress", autofocus, required)
 
-    input.btn.btn-primary.mb-2.w-25(type="submit", value="Create terminal")
+    input.btn.btn-primary.mb-2.w-25(type="submit", value="Ny terminal")

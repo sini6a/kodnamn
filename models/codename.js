@@ -3,9 +3,9 @@ var Terminal = require("../models/terminal");
 // const mongoosePaginate = require('mongoose-paginate');
 
 var CodenameSchema = new mongoose.Schema({
-  user: mongoose.ObjectId,
-  manager: mongoose.ObjectId,
-  customer: mongoose.ObjectId,
+  user: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
+  manager: {type: mongoose.Schema.Types.ObjectId, ref: "Manager"},
+  customer: {type: mongoose.Schema.Types.ObjectId, ref: "Customer"},
   name: String,
   location: String,
   address: String,

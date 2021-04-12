@@ -6,8 +6,6 @@ const { body, validationResult } = require('express-validator');
 
 /* GET codenames listing. */
 router.get('/', isAuthenticated, async function(req, res, next) {
-  let errors = new Object()
-
   try {
     var nicknames = await Nickname.find({user: req.user.id}).exec();
   } catch (e) {
@@ -15,16 +13,15 @@ router.get('/', isAuthenticated, async function(req, res, next) {
   }
 
   res.render('nicknames/index', {
-    title: "Nicknames",
+    title: "Smeknamn",
     authenticated: req.isAuthenticated(),
     nicknames,
-    errors
   })
 });
 
 // create new codename (post)
 router.post("/", [
-  body('name', 'Codename is required').notEmpty()
+  body('name', 'Smeknamn är obligatoriskt').notEmpty()
 ], isAuthenticated, async function(req, res, next){
     let { name } = req.body
 
@@ -43,7 +40,7 @@ router.post("/", [
 
     if(!errors.isEmpty()) {
       res.render('nicknames/index', {
-        title: "Nicknames",
+        title: "Smeknamn",
         authenticated: req.isAuthenticated(),
         errors,
         form,
@@ -61,7 +58,7 @@ router.post("/", [
         console.error(e);
         errors.push({msg: e});
         res.render('nicknames/index', {
-          title: "Nicknames",
+          title: "Smeknamn",
           authenticated: req.isAuthenticated(),
           errors,
           form,
@@ -69,7 +66,7 @@ router.post("/", [
         })
       }
 
-      req.flash('success', 'Nickname successfully created!')
+      req.flash('success', 'Smeknamnet har registrerats!')
       res.redirect('/nicknames');
     }
 });
@@ -91,7 +88,7 @@ router.get('/edit/:id', isAuthenticated, async function(req, res, next) {
   };
 
   res.render('nicknames/create', {
-    title: 'Modyfing ' + nickname.name,
+    title: 'Modifierar ' + nickname.name,
     authenticated: req.isAuthenticated(),
     form,
   })
@@ -99,7 +96,7 @@ router.get('/edit/:id', isAuthenticated, async function(req, res, next) {
 
 // modify manager (post)
 router.post("/edit/:id", [
-  body('name', 'Nickname is required').notEmpty()
+  body('name', 'Smeknamn är obligatoriskt').notEmpty()
 ], isAuthenticated, async function(req, res, next){
     let { name } = req.body
     let id = req.params.id
@@ -120,7 +117,7 @@ router.post("/edit/:id", [
 
     if(!errors.isEmpty()) {
       res.render('nicknames/create', {
-        title: 'Modyfing ' + nickname.name,
+        title: 'Modifierar ' + nickname.name,
         authenticated: req.isAuthenticated(),
         form,
         errors
@@ -132,17 +129,33 @@ router.post("/edit/:id", [
         console.error(e);
         errors.push({msg: e});
         res.render('nicknames/create', {
-          title: 'Modyfing ' + nickname.name,
+          title: 'Modifierar ' + nickname.name,
           authenticated: req.isAuthenticated(),
           form,
           errors
         })
       }
 
-      req.flash('success', 'Nickname successfully modified!')
+      req.flash('success', 'Smeknamnet har modifierats!')
       res.redirect('/nicknames');
     }
 });
+
+// delete nickname (post)
+router.post('/delete/:id', isAuthenticated, async function(req, res, next) {
+  let id = req.params.id
+
+  try {
+    await Nickname.findById(id, function(err, nickname) {
+      nickname.remove();
+    }).exec();
+  } catch (e) {
+    console.log(e);
+  }
+
+  req.flash('success', 'Smeknamn har raderats!')
+  res.redirect('/nicknames');
+})
 
 // check if user is logged in
 function isAuthenticated(req, res, next){
