@@ -23,15 +23,21 @@ block content
   hr
 
   form.form-group(method="post")
-      div.form-input
-        label Kodnamn
-        select.form-control.custom-select(name="codename")
-          if codenames
-            each codename in codenames
-              if form.codename
-                option(value=codename.id selected=(codename.id == form.codename.id)) #{codename.name}
-              else
-                option(value=codename.id) #{codename.name}
+      div.row
+        div.form-input.mt-3.col-10
+          label Kodnamn
+          select.form-control.custom-select(name="codename")
+            if codenames
+              each codename in codenames
+                if form.codename
+                  option(value=codename.id selected=(codename.id == form.codename.id)) #{codename.name}
+                else
+                  option(value=codename.id) #{codename.name}
+        div.form-input.mt-3.col-2
+          label <br>
+          a.btn.btn-outline-primary.btn-block(target="popup" onclick="window.open('/codenames/create/','popup','width=600,height=600'); window.location.reload();")
+            <i class="bi bi-plus"></i>
+
       div.form-input.mt-3
         label MAC Adress
         input.form-control(type="text", name="macAddress", value=form.macAddress, autofocus)
