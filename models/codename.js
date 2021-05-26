@@ -17,7 +17,7 @@ var CodenameSchema = new mongoose.Schema({
 CodenameSchema.pre('remove', async function(next) {
   // Remove all terminals that reference the removed codename.
   console.log('removing...');
-  await Terminal.deleteMany({ codename: this.id }, next);
+  await Terminal.update({ codename: this.id }, {"$set":{"codename": null}}, {"multi": true}, next);
 });
 
 Codename = mongoose.model("Codename", CodenameSchema);

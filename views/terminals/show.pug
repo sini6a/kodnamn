@@ -4,8 +4,12 @@ block content
   if terminal
     div.row
       div.col-1
-        a.btn.btn-outline-secondary.btn-block.btn-sm(href="/codenames/" + terminal.codename.id)
-          <i class="bi bi-arrow-left"></i>
+        if terminal.codename
+          a.btn.btn-outline-secondary.btn-block.btn-sm(href="/codenames/" + terminal.codename.id)
+            <i class="bi bi-arrow-left"></i>
+        else
+          a.btn.btn-outline-secondary.btn-block.btn-sm(href="/codenames/" disabled)
+            <i class="bi bi-arrow-left"></i>
       p.lead.text-center.col-10= title
       div.col-1
         a.btn.btn-outline-primary.btn-block.btn-sm(href="/terminals/edit/" + terminal.id)
@@ -23,10 +27,11 @@ block content
         tr
           td Tid
           td.font-weight-bold #{new Date(terminal.createdAt).toLocaleTimeString('se-SE')}
-        tr
-          td Kodnamn
-          td.font-weight-bold
-            a(href="/codenames/" + terminal.codename.id) #{terminal.codename.name}
+        if terminal.codename
+          tr
+            td Kodnamn
+            td.font-weight-bold
+              a(href="/codenames/" + terminal.codename.id) #{terminal.codename.name}
         if terminal.motherboard
           tr
             td Moderkort

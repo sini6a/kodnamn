@@ -23,14 +23,15 @@ router.get('/search', isAuthenticated, async function(req, res, next) {
   try {
     codenames = await Codename.find({name: {$regex: keyword, $options: "i" }}).find({user: req.user}).exec();
     // TODO: We must have user related search in order to hide terminals that user not owns.
-    // terminals = await Terminal.find({macAddress: {$regex: keyword, $options: "i" }}).exec();
+    terminals = await Terminal.find({macAddress: {$regex: keyword, $options: "i" }, user: req.user}).exec();
   } catch (e) {
     console.error(e);
   } finally {
     res.render('result', {
       title: 'Sökresultat för: ' + keyword,
       authenticated: req.isAuthenticated(),
-      codenames
+      codenames,
+      terminals
     });
   }
 })

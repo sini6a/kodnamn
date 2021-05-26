@@ -14,3 +14,15 @@ block content
   else
     div.list-group.mt-3
       p.text-center Inga kodnamn hittade
+
+  hr
+
+  p.lead.text-center Terminaler
+
+  if terminals.length
+    div.list-group.mt-3
+      each terminal in terminals
+        a.list-group-item.list-group-item-action(href="/terminals/" + terminal.id) #{terminal.macAddress}
+  else
+    div.list-group.mt-3
+      p.text-center Inga terminaler hittade

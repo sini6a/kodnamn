@@ -3,6 +3,7 @@ var mongoose = require("mongoose");
 
 var TerminalSchema = new mongoose.Schema({
   codename: {type: mongoose.Schema.Types.ObjectId, ref: "Codename"},
+  user: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
   macAddress: String,
   nickname: {type: mongoose.Schema.Types.ObjectId, ref: "Nickname"},
   motherboard: String,

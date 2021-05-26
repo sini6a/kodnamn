@@ -25,18 +25,28 @@ block content
   form.form-group(method="post")
       div.form-input
         label Kodnamn
-        input.form-control(type="text", name="codename", value=form.codename readonly)
-
+        select.form-control.custom-select(name="codename")
+          if codenames
+            each codename in codenames
+              if form.codename
+                option(value=codename.id selected=(codename.id == form.codename.id)) #{codename.name}
+              else
+                option(value=codename.id) #{codename.name}
       div.form-input.mt-3
         label MAC Adress
         input.form-control(type="text", name="macAddress", value=form.macAddress, autofocus)
 
-      div.form-input.mt-3
-        label Smeknamn
-        select.form-control.custom-select(name="nickname")
-          if nicknames
-            each nickname in nicknames
-              option(value=nickname.id selected=(nickname.id == form.nickname)) #{nickname.name}
+      div.row
+        div.form-input.mt-3.col-10
+          label Smeknamn
+          select.form-control.custom-select(name="nickname")
+            if nicknames
+              each nickname in nicknames
+                option(value=nickname.id selected=(nickname.id == form.nickname)) #{nickname.name}
+        div.form-input.mt-3.col-2
+          label <br>
+          a.btn.btn-outline-primary.btn-block(target="popup" onclick="window.open('/nicknames/','popup','width=600,height=600'); window.location.reload();")
+            <i class="bi bi-plus"></i>
 
       p.text-center.mt-3 Specifikationer
       hr

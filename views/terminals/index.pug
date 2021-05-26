@@ -1,0 +1,24 @@
+extends ../layout
+
+block content
+  p.lead.text-center= title
+
+  hr
+
+  if unregisteredTerminals.length
+    div.list-group
+      each terminal in unregisteredTerminals
+        a.list-group-item.list-group-item-action(href="/terminals/" + terminal.id) #{terminal.macAddress}
+  else
+    div.list-group
+      p.text-center Inga oregistrerade terminaler
+
+  hr
+
+  if registeredTerminals.length
+    div.list-group
+      each terminal in registeredTerminals
+        a.list-group-item.list-group-item-action(href="/terminals/" + terminal.id) #{terminal.macAddress}
+  else
+    div.list-group
+      p.text-center Inga registrerade terminaler

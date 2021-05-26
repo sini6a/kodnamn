@@ -35,9 +35,17 @@ block content
         tr
           td Agent
           td.font-weight-bold #{manager.name}
+        if manager.contact
+          tr
+            td
+            td.font-weight-bold #{manager.contact}
         tr
           td Kund
           td.font-weight-bold #{customer.name}
+        if customer.contact
+          tr
+            td
+            td.font-weight-bold #{customer.contact}
 
 
   p.lead.text-center.mt-5 Terminaler
@@ -52,7 +60,9 @@ block content
     div.list-group
       p.text-center Inga terminaler än
 
-  form.form-inline.mt-3(method="get" action="/terminals/create/" + codename.id)
+  form.form-inline.mt-3(method="get" action="/terminals/create/")
+    input(type="hidden", name="codename", value=codename.id)
+
     div.form-group.mb-2.pr-sm-3.w-75
       input.form-control.w-100(type="text", name="macAddress", autofocus, required)
 

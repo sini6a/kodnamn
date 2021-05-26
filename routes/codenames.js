@@ -23,7 +23,7 @@ router.get('/', isAuthenticated, async function(req, res, next) {
 });
 
 // create new codename (get)
-router.get('/create/', isAuthenticated, async function(req, res, next) {
+router.get('/create/', isAuthenticated, isUnique, async function(req, res, next) {
   let { name, location, address, manager, customer } = req.body
 
   // fields
@@ -117,7 +117,7 @@ router.post("/create", [
 });
 
 // modify codename (get)
-router.get('/edit/:id', isAuthenticated, async function(req, res, next) {
+router.get('/edit/:id', isAuthenticated, isOwner, async function(req, res, next) {
   let id = req.params.id
 
   try {
@@ -152,7 +152,7 @@ router.post("/edit/:id", [
   body('name', 'Kodnamn är obligatoriskt').notEmpty(),
   body('location', 'Stad är obligatoriskt').notEmpty(),
   body('manager', 'Agent är obligatorisk').notEmpty(),
-], isAuthenticated, async function(req, res, next){
+], isAuthenticated, isOwner, async function(req, res, next){
     let { name, location, address, manager, customer } = req.body
     let id = req.params.id
 
@@ -209,7 +209,7 @@ router.post("/edit/:id", [
 
 // All Time Low & Blackbear - Monsters
 // delete codename (post)
-router.post('/delete/:id', isAuthenticated, async function(req, res, next) {
+router.post('/delete/:id', isAuthenticated, isOwner, async function(req, res, next) {
   let id = req.params.id
 
   try {
@@ -225,7 +225,7 @@ router.post('/delete/:id', isAuthenticated, async function(req, res, next) {
 })
 
 // show codename (get)
-router.get('/:id', isAuthenticated, async function(req, res, next) {
+router.get('/:id', isAuthenticated, isOwner, async function(req, res, next) {
   let id = req.params.id
 
   try {
@@ -248,6 +248,26 @@ router.get('/:id', isAuthenticated, async function(req, res, next) {
     terminals,
   })
 });
+
+// check if user is owner of the data
+async function isOwner(req, res, next){
+  codename = await Codename.findById(req.params.id).exec();
+  if(codename.user == req.user.id){
+    return next();
+  }
+  req.flash('error', 'You are not the owner of the data you are trying to access!')
+  res.redirect('/codenames')
+}
+
+// check if codename is unique
+async function isUnique(req, res, next){
+  exists = await Codename.exists({user: req.user, name: req.query.name})
+  if(!exists){
+    return next();
+  }
+  req.flash('error', `${req.query.name} är redan registrerad!`)
+  res.redirect("/codenames/")
+}
 
 // check if user is logged in
 function isAuthenticated(req, res, next){

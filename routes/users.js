@@ -66,6 +66,8 @@ router.post("/register", function(req, res, next){
           console.log(doc);
         });
 
+        // Create 
+
         passport.authenticate("local")(req, res, function(){
             req.flash('success','Du har registrerats!');
             res.redirect('/codenames');
