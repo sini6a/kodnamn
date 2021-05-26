@@ -4,8 +4,8 @@ var Terminal = require("../models/terminal");
 
 var CodenameSchema = new mongoose.Schema({
   user: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
-  manager: {type: mongoose.Schema.Types.ObjectId, ref: "Manager"},
-  customer: {type: mongoose.Schema.Types.ObjectId, ref: "Customer"},
+  manager: {type: mongoose.Schema.Types.ObjectId, ref: "Manager", default : null},
+  customer: {type: mongoose.Schema.Types.ObjectId, ref: "Customer", default : null},
   name: String,
   location: String,
   address: String,

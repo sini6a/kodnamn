@@ -61,13 +61,12 @@ router.post("/register", function(req, res, next){
         }
 
         // Create customer nobody on user registration
-        Customer.create({user: user, name: "Nobody"}, function(err, doc) {
-          if(err) console.error(err);
-          console.log(doc);
-        });
+        // Customer.create({user: user, name: "Nobody"}, function(err, doc) {
+        //   if(err) console.error(err);
+        //   console.log(doc);
+        // });
 
-        // Create 
-
+        // Create
         passport.authenticate("local")(req, res, function(){
             req.flash('success','Du har registrerats!');
             res.redirect('/codenames');

@@ -32,20 +32,24 @@ block content
           tr
             td Adress
             td.font-weight-bold #{codename.address}
-        tr
-          td Agent
-          td.font-weight-bold #{manager.name}
-        if manager.contact
+        if manager
           tr
-            td
-            td.font-weight-bold #{manager.contact}
-        tr
-          td Kund
-          td.font-weight-bold #{customer.name}
-        if customer.contact
+            td Agent
+            td.font-weight-bold #{manager.name}
+        if manager
+          if manager.contact
+            tr
+              td
+              td.font-weight-bold #{manager.contact}
+        if customer
           tr
-            td
-            td.font-weight-bold #{customer.contact}
+            td Kund
+            td.font-weight-bold #{customer.name}
+        if customer
+          if customer.contact
+            tr
+              td
+              td.font-weight-bold #{customer.contact}
 
 
   p.lead.text-center.mt-5 Terminaler

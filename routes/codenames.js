@@ -57,7 +57,6 @@ router.get('/create/', isAuthenticated, isUnique, async function(req, res, next)
 router.post("/create", [
   body('name', 'Kodnamn är obligatoriskt').notEmpty(),
   body('location', 'Stad är obligatoriskt').notEmpty(),
-  body('manager', 'Agent är obligatorisk').notEmpty(),
 ], isAuthenticated, async function(req, res, next){
     let { name, location, address, manager, customer } = req.body
 
@@ -151,7 +150,6 @@ router.get('/edit/:id', isAuthenticated, isOwner, async function(req, res, next)
 router.post("/edit/:id", [
   body('name', 'Kodnamn är obligatoriskt').notEmpty(),
   body('location', 'Stad är obligatoriskt').notEmpty(),
-  body('manager', 'Agent är obligatorisk').notEmpty(),
 ], isAuthenticated, isOwner, async function(req, res, next){
     let { name, location, address, manager, customer } = req.body
     let id = req.params.id
