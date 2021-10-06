@@ -52,3 +52,13 @@ Please make sure to update tests as appropriate.
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
+
+## Screenshots
+
+![Screenshot #1](/screenshots/1.png?raw=true "Screenshot #1")
+![Screenshot #2](/screenshots/2.png?raw=true "Screenshot #2")
+![Screenshot #3](/screenshots/3.png?raw=true "Screenshot #3")
+![Screenshot #4](/screenshots/4.png?raw=true "Screenshot #4")
+![Screenshot #5](/screenshots/5.png?raw=true "Screenshot #5")
+![Screenshot #6](/screenshots/6.png?raw=true "Screenshot #6")
+![Screenshot #7](/screenshots/7.png?raw=true "Screenshot #7")
