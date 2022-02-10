@@ -3,28 +3,28 @@ extends ../layout
 block content
   if terminal
     div.row
-      div.col-2
+      div.col-3.col-md-2.col-lg-1
         a.btn.btn-outline-secondary.btn-block.btn-sm(href="javascript:history.back()")
           <i class="bi bi-arrow-left"></i>
-      p.lead.text-center.col-8= title
-      form.col-2(method="post" action="/terminals/delete/" + terminal.id)
+      p.lead.text-center.col-6.col-md-8.col-lg-10= title
+      form.col-3.col-md-2.col-lg-1(method="post" action="/terminals/delete/" + terminal.id)
         button.btn.btn-outline-danger.btn-block.btn-sm(type="submit")
           <i class="bi bi-trash"></i>
 
   else
     div.row
-      div.col-2
+      div.col-3.col-md-2.col-lg-1
         a.btn.btn-outline-secondary.btn-block.btn-sm(href="/codenames/" + codename.id)
           <i class="bi bi-arrow-left"></i>
-      p.lead.text-center.col-8= title
-      div.col-2
+      p.lead.text-center.col-6.col-md-8.col-lg-10= title
+      div.col-3.col-md-2.col-lg-1
         a.btn.btn-outline-danger.btn-block.btn-sm.disabled
           <i class="bi bi-trash"></i>
   hr
 
   form.form-group(method="post")
       div.row
-        div.form-input.mt-3.col-10
+        div.form-input.mt-3.col
           label Kodnamn
           select.form-control.custom-select(name="codename")
             if codenames
@@ -33,7 +33,7 @@ block content
                   option(value=codename.id selected=(codename.id == form.codename.id)) #{codename.name}
                 else
                   option(value=codename.id) #{codename.name}
-        div.form-input.mt-3.col-2
+        div.form-input.mt-3.col-3
           label <br>
           a.btn.btn-outline-primary.btn-block(target="popup" onclick="window.open('/codenames/create/','popup','width=600,height=600'); window.location.reload();")
             <i class="bi bi-plus"></i>
@@ -43,18 +43,18 @@ block content
         input.form-control(type="text", name="macAddress", value=form.macAddress, autofocus)
 
       div.row
-        div.form-input.mt-3.col-10
+        div.form-input.mt-3.col
           label Smeknamn
           select.form-control.custom-select(name="nickname")
             if nicknames
               each nickname in nicknames
                 option(value=nickname.id selected=(nickname.id == form.nickname)) #{nickname.name}
-        div.form-input.mt-3.col-2
+        div.form-input.mt-3.col-3
           label <br>
           a.btn.btn-outline-primary.btn-block(target="popup" onclick="window.open('/nicknames/','popup','width=600,height=600'); window.location.reload();")
             <i class="bi bi-plus"></i>
 
-      p.text-center.mt-3 Specifikationer
+      p.font-weight-bold.text-center.mt-3.text-weight-bold Specifikationer
       hr
 
       div.form-input.mt-3
@@ -73,7 +73,7 @@ block content
         label RAM
         input.form-control(type="number", name="ram", value=form.ram)
 
-      p.text-center.mt-3 Anslutning information
+      p.font-weight-bold.text-center.mt-3 Anslutning information
       hr
 
       div.form-input.mt-3

@@ -13,11 +13,12 @@ block content
     div.list-group
       p.text-center Inga kodnamn ännu.
 
-  form.form-inline.mt-3(method="get" action="/codenames/create/")
-    div.form-group.mb-2.pr-sm-3.w-75
-      input.form-control.w-100(type="text", name="name", autofocus, required)
-
-    input.btn.btn-primary.mb-2.w-25(type="submit", value="Nytt kodnamn")
+  form.mt-3(method="get" action="/codenames/create/")
+    div.row
+      div.col
+        input.form-control(type="text", name="name", autofocus, required)
+      div.col-md-4.col-5
+        input.btn.btn-primary.mb-2.w-100(type="submit", value="Nytt kodnamn")
 
   hr
 

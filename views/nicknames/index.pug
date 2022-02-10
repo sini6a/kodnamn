@@ -13,8 +13,9 @@ block content
     div.list-group
       p.text-center Inga smeknamn än
 
-  form.form-inline.mt-3(name="create", method="post")
-    div.form-group.mb-2.pr-sm-3.w-75
-      input.form-control.w-100(type="text", name="name", autofocus, required)
-
-    input.btn.btn-primary.mb-2.w-25(type="submit", value="Nytt smeknamn")
+  form.mt-3(name="create", method="post")
+    div.row
+      div.col
+        input.form-control(type="text", name="name", autofocus, required)
+      div.col-md-4.col-5
+        input.btn.btn-primary.mb-2.w-100(type="submit", value="Nytt smeknamn")

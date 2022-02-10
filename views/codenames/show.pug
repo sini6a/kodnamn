@@ -3,11 +3,11 @@ extends ../layout
 block content
   if codename
     div.row
-      div.col-2
+      div.col-3.col-md-2.col-lg-1
         a.btn.btn-outline-secondary.btn-block.btn-sm(href="javascript:history.back()")
           <i class="bi bi-arrow-left"></i>
-      p.lead.text-center.col-8= title
-      div.col-2
+      p.lead.text-center.col-6.col-md-8.col-lg-10= title
+      div.col-3.col-md-2.col-lg-1
         a.btn.btn-outline-primary.btn-block.btn-sm(href="/codenames/edit/" + codename.id)
           <i class="bi bi-pen"></i>
 
@@ -66,10 +66,11 @@ block content
       p.text-center Inga terminaler.
 
   if !codename.deleted
-    form.form-inline.mt-3(method="get" action="/terminals/create/")
+    form.mt-3(method="get" action="/terminals/create/")
       input(type="hidden", name="codename", value=codename.id)
 
-      div.form-group.mb-2.pr-sm-3.w-75
-        input.form-control.w-100(type="text", name="macAddress", autofocus, required)
-
-      input.btn.btn-primary.mb-2.w-25(type="submit", value="Ny terminal")
+      div.row
+        div.col
+          input.form-control(type="text", name="macAddress", autofocus, required)
+        div.col-md-4.col-5
+          input.btn.btn-primary.mb-2.w-100(type="submit", value="Ny terminal")

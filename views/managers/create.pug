@@ -4,21 +4,21 @@ block content
 
   if manager
     div.row
-      div.col-2
+      div.col-3.col-md-2.col-lg-1
         a.btn.btn-outline-secondary.btn-block.btn-sm(href="javascript:history.back()")
           <i class="bi bi-arrow-left"></i>
-      p.lead.text-center.col-8= title
-      form.col-2(method="post" action="/managers/delete/" + manager.id)
+      p.lead.text-center.col-6.col-md-8.col-lg-10= title
+      form.col-3.col-md-2.col-lg-1(method="post" action="/managers/delete/" + manager.id)
         button.btn.btn-outline-danger.btn-block.btn-sm(type="submit")
           <i class="bi bi-trash"></i>
 
   else
     div.row
-      div.col-2
+      div.col-3.col-md-2.col-lg-1
         a.btn.btn-outline-secondary.btn-block.btn-sm(href="/managers")
           <i class="bi bi-arrow-left"></i>
-      p.lead.text-center.col-8= title
-      div.col-2
+      p.lead.text-center.col-6.col-md-8.col-lg-10= title
+      div.col-3.col-md-2.col-lg-1
         a.btn.btn-outline-danger.btn-block.btn-sm.disabled
           <i class="bi bi-trash"></i>
 
