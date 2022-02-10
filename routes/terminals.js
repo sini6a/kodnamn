@@ -10,8 +10,8 @@ const { body, validationResult } = require('express-validator');
 // index terminals (get)
 router.get('/', isAuthenticated, async function(req, res, next) {
   try {
-    unregisteredTerminals = await Terminal.find({user: req.user.id}).where("codename").eq(null).exec();
-    registeredTerminals = await Terminal.find({user: req.user.id}).where("codename").ne(null).exec();
+    unregisteredTerminals = await Terminal.find({user: req.user.id}).where("codename").eq(null).populate("nickname").exec();
+    registeredTerminals = await Terminal.find({user: req.user.id}).where("codename").ne(null).populate("nickname").exec();
   } catch (e) {
     console.error(e);
   }
@@ -24,16 +24,18 @@ router.get('/', isAuthenticated, async function(req, res, next) {
   })
 })
 
-// create new codename (get)
+// create new terminal (get)
 router.get('/create', isAuthenticated, isUnique, async function(req, res, next) {
   let { codename, macAddress, nickname, motherboard, processor, graphics, ram, teamviewer } = req.body
 
+  console.log("Console log: " + req.query.codename)
   let id = req.query.codename
+  macAddress = req.query.macAddress
 
   try {
     codename = await Codename.findById(id).exec();
     nicknames = await Nickname.find({user: req.user}).exec();
-    codenames = await Codename.find({user: req.user}).exec();
+    codenames = await Codename.find({user: req.user, deleted: false}).exec();
   } catch (e) {
     console.error(e);
   }
@@ -133,7 +135,7 @@ router.get('/edit/:id', isAuthenticated, isOwner, async function(req, res, next)
 
   try {
     terminal = await Terminal.findById(id).populate('codename').exec();
-    codenames = await Codename.find({user: req.user}).exec();
+    codenames = await Codename.find({user: req.user, deleted: false}).exec();
     nicknames = await Nickname.find({user: req.user}).exec();
   } catch (e) {
     console.log(e);
@@ -173,7 +175,7 @@ router.post("/edit/:id", [
 
     try {
       codename = await Codename.findById(codename).exec();
-      codenames = await Codename.find({user: req.user}).exec();
+      codenames = await Codename.find({user: req.user, deleted: false}).exec();
       terminal = await Terminal.findById(id).populate('codename').exec();
       nicknames = await Nickname.find({user: req.user}).exec();
     } catch (e) {
@@ -227,20 +229,24 @@ router.post("/edit/:id", [
 });
 
 // delete terminal (post)
-router.post('/delete/:id', isAuthenticated, isOwner, async function(req, res, next) {
+router.post('/delete/:id', isAuthenticated, isOwner, async function(req, res) {
   let id = req.params.id
   let errors = new Object()
 
   try {
-    terminal = await Terminal.findById(id).exec();
-    codename = terminal.codename;
-    await terminal.delete();
+    terminal = await Terminal.findById(id);
+    if (terminal.codename == null) {
+      terminal.deleteOne()
+    } else {
+      terminal.codename = null
+    }
+    await terminal.save();
   } catch (e) {
     console.log(e);
   }
 
   req.flash('success', 'Terminalen har raderats!')
-  res.redirect('/codenames/' + codename._id);
+  res.redirect('/terminals');
 })
 
 // show terminal (get)
@@ -270,13 +276,14 @@ async function isOwner(req, res, next){
   res.redirect('/terminals')
 }
 
-// check if manager is unique
+// check if mac address of terminal is unique
 async function isUnique(req, res, next){
-  exists = await Terminal.exists({user: req.user, name: req.query.name})
+  console.log(req.query.macAddress)
+  exists = await Terminal.exists({user: req.user, macAddress: req.query.macAddress})
   if(!exists){
     return next();
   }
-  req.flash('error', `${req.query.name} är redan registrerad!`)
+  req.flash('error', `${req.query.macAddress} är redan registrerad!`)
   res.redirect("/terminals/")
 }
 

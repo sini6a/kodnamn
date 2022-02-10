@@ -3,11 +3,11 @@ extends ../layout
 block content
   if codename
     div.row
-      div.col-1
-        a.btn.btn-outline-secondary.btn-block.btn-sm(href="/codenames/")
+      div.col-2
+        a.btn.btn-outline-secondary.btn-block.btn-sm(href="javascript:history.back()")
           <i class="bi bi-arrow-left"></i>
-      p.lead.text-center.col-10= title
-      div.col-1
+      p.lead.text-center.col-8= title
+      div.col-2
         a.btn.btn-outline-primary.btn-block.btn-sm(href="/codenames/edit/" + codename.id)
           <i class="bi bi-pen"></i>
 
@@ -59,15 +59,17 @@ block content
   if terminals.length
     div.list-group
       each terminal in terminals
-        a.list-group-item.list-group-item-action(href="/terminals/" + terminal.id) #{terminal.macAddress} (#{terminal.nickname.name})
+        a.font-weight-bold.list-group-item.list-group-item-action(href="/terminals/" + terminal.id) #{terminal.macAddress} 
+          small #{terminal.nickname.name}
   else
     div.list-group
-      p.text-center Inga terminaler än
+      p.text-center Inga terminaler.
 
-  form.form-inline.mt-3(method="get" action="/terminals/create/")
-    input(type="hidden", name="codename", value=codename.id)
+  if !codename.deleted
+    form.form-inline.mt-3(method="get" action="/terminals/create/")
+      input(type="hidden", name="codename", value=codename.id)
 
-    div.form-group.mb-2.pr-sm-3.w-75
-      input.form-control.w-100(type="text", name="macAddress", autofocus, required)
+      div.form-group.mb-2.pr-sm-3.w-75
+        input.form-control.w-100(type="text", name="macAddress", autofocus, required)
 
-    input.btn.btn-primary.mb-2.w-25(type="submit", value="Ny terminal")
+      input.btn.btn-primary.mb-2.w-25(type="submit", value="Ny terminal")

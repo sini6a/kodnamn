@@ -13,12 +13,14 @@ var locations = require('../locations/se.json')
 
 /* GET codenames listing. */
 router.get('/', isAuthenticated, async function(req, res, next) {
-  let codenames = await Codename.find({user: req.user.id}).sort({createdAt: -1}).exec();
+  let codenames = await Codename.find({user: req.user.id, deleted: false}).sort({createdAt: -1}).exec();
+  let deletedCodenames = await Codename.find({user: req.user.id, deleted: true}).sort({createdAt: -1}).exec();
 
   res.render('codenames/index', {
     title: "Kodnamn",
     authenticated: req.isAuthenticated(),
     codenames: codenames,
+    deletedCodenames: deletedCodenames
   })
 });
 
@@ -211,9 +213,13 @@ router.post('/delete/:id', isAuthenticated, isOwner, async function(req, res, ne
   let id = req.params.id
 
   try {
-    await Codename.findById(id, function(err, codename) {
-      codename.remove();
-    }).exec();
+    codename = await Codename.findById(id);
+    if (codename.deleted == true) {
+      codename.deleteOne()
+    } else {
+      codename.deleted = true
+    }
+    await codename.save();
   } catch (e) {
     console.log(e);
   }

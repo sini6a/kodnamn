@@ -84,7 +84,13 @@ router.get('/edit/:id', isAuthenticated, isOwner, async function(req, res, next)
   let id = req.params.id
 
   try {
-    customer = await Customer.findById(id).exec();
+    var customer = await Customer.findById(id).exec();
+  } catch (e) {
+    console.log(e);
+  }
+
+  try {
+    var codenames = await Codename.find({user: req.user.id, deleted: false, customer: customer._id}).sort({createdAt: -1}).exec();
   } catch (e) {
     console.log(e);
   }
@@ -101,6 +107,7 @@ router.get('/edit/:id', isAuthenticated, isOwner, async function(req, res, next)
     authenticated: req.isAuthenticated(),
     customer: customer,
     form,
+    codenames
   })
 })
 

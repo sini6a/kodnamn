@@ -3,15 +3,15 @@ extends ../layout
 block content
   if terminal
     div.row
-      div.col-1
+      div.col-2
         if terminal.codename
-          a.btn.btn-outline-secondary.btn-block.btn-sm(href="/codenames/" + terminal.codename.id)
+          a.btn.btn-outline-secondary.btn-block.btn-sm(href="javascript:history.back()")
             <i class="bi bi-arrow-left"></i>
         else
-          a.btn.btn-outline-secondary.btn-block.btn-sm(href="/codenames/" disabled)
+          a.btn.btn-outline-secondary.btn-block.btn-sm(href="javascript:history.back()" disabled)
             <i class="bi bi-arrow-left"></i>
-      p.lead.text-center.col-10= title
-      div.col-1
+      p.lead.text-center.col-8= title
+      div.col-2
         a.btn.btn-outline-primary.btn-block.btn-sm(href="/terminals/edit/" + terminal.id)
           <i class="bi bi-pen"></i>
     p.text-center (#{terminal.nickname.name})

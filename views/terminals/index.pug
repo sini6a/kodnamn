@@ -8,7 +8,8 @@ block content
   if unregisteredTerminals.length
     div.list-group
       each terminal in unregisteredTerminals
-        a.list-group-item.list-group-item-action(href="/terminals/" + terminal.id) #{terminal.macAddress}
+        a.font-weight-bold.list-group-item.list-group-item-action(href="/terminals/" + terminal.id) #{terminal.macAddress} 
+          small #{terminal.nickname.name}
   else
     div.list-group
       p.text-center Inga oregistrerade terminaler
@@ -18,7 +19,8 @@ block content
   if registeredTerminals.length
     div.list-group
       each terminal in registeredTerminals
-        a.list-group-item.list-group-item-action(href="/terminals/" + terminal.id) #{terminal.macAddress}
+        a.font-weight-bold.list-group-item.list-group-item-action(href="/terminals/" + terminal.id) #{terminal.macAddress} 
+          small #{terminal.nickname.name}
   else
     div.list-group
       p.text-center Inga registrerade terminaler

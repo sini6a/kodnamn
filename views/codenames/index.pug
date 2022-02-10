@@ -11,10 +11,20 @@ block content
         a.list-group-item.list-group-item-action(href="/codenames/" + codename.id) #{codename.name}
   else
     div.list-group
-      p.text-center Inga kodnamn än
+      p.text-center Inga kodnamn ännu.
 
   form.form-inline.mt-3(method="get" action="/codenames/create/")
     div.form-group.mb-2.pr-sm-3.w-75
       input.form-control.w-100(type="text", name="name", autofocus, required)
 
     input.btn.btn-primary.mb-2.w-25(type="submit", value="Nytt kodnamn")
+
+  hr
+
+  if deletedCodenames.length
+    div.list-group
+      each codename in deletedCodenames
+        a.list-group-item.list-group-item-action(href="/codenames/" + codename.id) #{codename.name}
+  else
+    div.list-group
+      p.text-center Inga raderade kodnamn ännu.

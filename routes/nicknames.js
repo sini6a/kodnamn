@@ -2,12 +2,13 @@ var express = require('express');
 var router = express.Router();
 
 var Nickname = require("../models/nickname");
+var Terminal = require("../models/terminal");
 const { body, validationResult } = require('express-validator');
 
 /* GET codenames listing. */
 router.get('/', isAuthenticated, async function(req, res, next) {
   try {
-    var nicknames = await Nickname.find({user: req.user.id}).exec();
+    var nicknames = await Nickname.find({user: req.user.id}).sort({name:1}).exec();
   } catch (e) {
     console.error(e);
   }
@@ -74,6 +75,7 @@ router.post("/", [
 // modify nickname (get)
 router.get('/edit/:id', isAuthenticated, isOwner, async function(req, res, next) {
   let id = req.params.id
+  terminals = await Terminal.find({user: req.user.id, nickname: id}).populate('codename').exec();
 
   try {
     nickname = await Nickname.findById(id).populate('user').exec();
@@ -91,6 +93,7 @@ router.get('/edit/:id', isAuthenticated, isOwner, async function(req, res, next)
     title: 'Modifierar ' + nickname.name,
     authenticated: req.isAuthenticated(),
     form,
+    terminals: terminals,
   })
 })
 

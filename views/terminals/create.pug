@@ -3,21 +3,21 @@ extends ../layout
 block content
   if terminal
     div.row
-      div.col-1
-        a.btn.btn-outline-secondary.btn-block.btn-sm(href="/terminals/" + terminal.id)
+      div.col-2
+        a.btn.btn-outline-secondary.btn-block.btn-sm(href="javascript:history.back()")
           <i class="bi bi-arrow-left"></i>
-      p.lead.text-center.col-10= title
-      form.col-1(method="post" action="/terminals/delete/" + terminal.id)
+      p.lead.text-center.col-8= title
+      form.col-2(method="post" action="/terminals/delete/" + terminal.id)
         button.btn.btn-outline-danger.btn-block.btn-sm(type="submit")
           <i class="bi bi-trash"></i>
 
   else
     div.row
-      div.col-1
+      div.col-2
         a.btn.btn-outline-secondary.btn-block.btn-sm(href="/codenames/" + codename.id)
           <i class="bi bi-arrow-left"></i>
-      p.lead.text-center.col-10= title
-      div.col-1
+      p.lead.text-center.col-8= title
+      div.col-2
         a.btn.btn-outline-danger.btn-block.btn-sm.disabled
           <i class="bi bi-trash"></i>
   hr

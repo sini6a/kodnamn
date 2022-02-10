@@ -5,6 +5,7 @@ var router = express.Router();
 var Codename = require("../models/codename");
 var Manager = require("../models/manager");
 const { body, validationResult } = require('express-validator');
+const manager = require('../models/manager');
 
 /* GET managers listing. */
 router.get('/', isAuthenticated, async function(req, res, next) {
@@ -85,7 +86,13 @@ router.get('/edit/:id', isAuthenticated, isOwner, async function(req, res, next)
   let id = req.params.id
 
   try {
-    manager = await Manager.findById(id).exec();
+    var manager = await Manager.findById(id).exec();
+  } catch (e) {
+    console.log(e);
+  }
+
+  try {
+    var codenames = await Codename.find({user: req.user.id, deleted: false, manager: manager._id}).sort({createdAt: -1}).exec();
   } catch (e) {
     console.log(e);
   }
@@ -102,6 +109,7 @@ router.get('/edit/:id', isAuthenticated, isOwner, async function(req, res, next)
     authenticated: req.isAuthenticated(),
     manager,
     form,
+    codenames,
   })
 })
 
@@ -175,7 +183,7 @@ router.post('/delete/:id', isAuthenticated, isOwner, async function(req, res, ne
 
 // check if user is owner of the data
 async function isOwner(req, res, next){
-  manager = await Manager.findById(req.params.id).exec();
+  let manager = await Manager.findById(req.params.id).exec();
   if(manager.user == req.user.id){
     return next();
   }
