@@ -45,11 +45,14 @@ block content
           tr
             td Kund
             td.font-weight-bold #{customer.name}
-        if customer
           if customer.contact
             tr
               td
               td.font-weight-bold #{customer.contact}
+          if customer.note
+            tr
+              td
+              td.font-weight-bold #{customer.note}
 
 
   p.lead.text-center.mt-5 Terminaler
