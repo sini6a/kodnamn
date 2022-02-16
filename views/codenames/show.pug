@@ -70,7 +70,7 @@ block content
 
   if !codename.deleted
     form.mt-3(method="get" action="/terminals/create/")
-      input(type="hidden", name="codename", value=codename.id)
+      input(type="hidden", name="codename", value=codename._id)
 
       div.row
         div.col

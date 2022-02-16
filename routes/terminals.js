@@ -5,7 +5,11 @@ var router = express.Router();
 var Codename = require("../models/codename");
 var Terminal = require("../models/terminal");
 var Nickname = require("../models/nickname");
+var Service = require("../models/service");
 const { body, validationResult } = require('express-validator');
+
+// Location
+var parts = require('../external_data/parts.json')
 
 // index terminals (get)
 router.get('/', isAuthenticated, async function(req, res, next) {
@@ -252,9 +256,22 @@ router.post('/delete/:id', isAuthenticated, isOwner, async function(req, res) {
 // show terminal (get)
 router.get('/:id', isAuthenticated, isOwner, async function(req, res, next) {
   let id = req.params.id
+  let { note } = req.body
 
+  // fields
+  var form = {
+      parts: parts,
+      note: note,
+  };
+  
   try {
     terminal = await Terminal.findById(id).populate('codename').populate('nickname').exec();
+  } catch (e) {
+    console.log(e);
+  }
+
+  try {
+    services = await Service.find({terminal: terminal._id}).exec();
   } catch (e) {
     console.log(e);
   }
@@ -263,6 +280,9 @@ router.get('/:id', isAuthenticated, isOwner, async function(req, res, next) {
     title: terminal.macAddress,
     authenticated: req.isAuthenticated(),
     terminal,
+    parts,
+    form,
+    services
   })
 });
 

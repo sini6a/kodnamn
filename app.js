@@ -33,6 +33,7 @@ var managersRouter = require('./routes/managers');
 var customersRouter = require('./routes/customers');
 var terminalsRouter = require('./routes/terminals');
 var nicknamesRouter = require('./routes/nicknames');
+var servicesRouter = require('./routes/services');
 
 var app = express();
 
@@ -74,6 +75,7 @@ app.use('/managers', managersRouter);
 app.use('/customers', customersRouter);
 app.use('/terminals', terminalsRouter);
 app.use('/nicknames', nicknamesRouter);
+app.use('/services', servicesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

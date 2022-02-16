@@ -9,7 +9,7 @@ var Terminal = require("../models/terminal");
 const { body, validationResult } = require('express-validator');
 
 // Location
-var locations = require('../locations/se.json')
+var locations = require('../external_data/locations_sweden.json')
 
 /* GET codenames listing. */
 router.get('/', isAuthenticated, async function(req, res, next) {

@@ -52,3 +52,50 @@ block content
           tr
             td TeamViewer
             td.font-weight-bold #{terminal.teamviewer}
+
+  hr
+
+  if services.length
+    div.list-group
+      each service in services
+        a.list-group-item.list-group-item-action.flex-column.align-items-start(href="#" onclick="confirmDelete('" + service._id + "')")
+          div.d-flex.w-100.justify-content-between
+            h5.mb-1 #{service.part}
+            small #{new Date(service.createdAt).toLocaleDateString('se-SE')}
+          if(service.note)
+            small #{service.note}
+  else
+    div.list-group
+      p.text-center Inga serviser.
+
+  hr
+  p.lead.text-center Ny servis
+
+  form.form-group(method="post", action='/services/create')
+      input(type="hidden", name="terminal", value=terminal._id)
+      div.row
+        div.form-input.mt-3.col
+          label Servis
+          select.form-control.custom-select(name="part")
+            if parts
+              each part in parts
+                if form.part
+                  option(value=part selected=(part == form.part)) #{part}
+                else
+                  option(value=part) #{part}
+
+      div.form-input.mt-3
+        label Anteckning
+        textarea.form-control(name="note")= form.note
+
+      div.form-input.mt-3
+          input.btn.btn-primary(type="submit", value="Skicka")
+
+  script.
+    // The function below will start the confirmation dialog
+    function confirmDelete(id) {
+      let confirmDelete = confirm("Are you sure you want to delete service with id" + id +"?");
+      if (confirmDelete) {
+        window.location = '/services/delete/' + id;
+      }
+    }
