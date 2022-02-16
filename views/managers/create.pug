@@ -40,12 +40,12 @@ block content
       div.form-input.mt-3
           input.btn.btn-primary(type="submit", value="Skicka")
 
-  hr
-
-  if codenames.length
-    div.list-group
-      each codename in codenames
-        a.list-group-item.list-group-item-action(href="/codenames/" + codename.id) #{codename.name}
-  else
-    div.list-group
-      p.text-center Inga kodnamn.
+  if codenames
+    hr
+    if codenames.length
+      div.list-group
+        each codename in codenames
+          a.list-group-item.list-group-item-action(href="/codenames/" + codename.id) #{codename.name}
+    else
+      div.list-group
+        p.text-center Inga kodnamn.
